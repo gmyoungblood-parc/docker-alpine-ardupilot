@@ -14,7 +14,7 @@ MAINTAINER Michael Youngblood <Michael.Youngblood@parc.com>
 # 
 #########################################################################################
 
-ENV DATABASE_URL postgres://postgres:postgres1234@127.0.0.1:5432/apm_missions
+#ENV DATABASE_URL postgres://postgres:postgres1234@127.0.0.1:5432/apm_missions
 ENV PORT 8000
 ENV INSTANCE mavsim
 
@@ -86,7 +86,7 @@ RUN sed -i 's/feenableexcept(exceptions);/\/\/feenableexcept(exceptions);/' /ard
 RUN sed -i 's/if (old >= 0 && feenableexcept(old) < 0)/if (0)/' /ardupilot/libraries/AP_Math/matrix_alg.cpp
 # -- Ok, now we can compile
 WORKDIR /ardupilot/ArduPlane
-RUN ln -s /ardupilot/modules/mavlink/message_definitions message_definitions
+# RUN ln -s /ardupilot/modules/mavlink/message_definitions message_definitions
 RUN sim_vehicle.py -w
 
 # Cleanup
