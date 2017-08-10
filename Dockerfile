@@ -89,14 +89,9 @@ RUN rm -rf /tmp/*
 ENV ENV="/etc/profile"
 
 # Execution Setup for sim_vehicle autorun
-ENV SIM_CL_OPTION1 "--out=udpout:127.0.0.1:14559"
-ENV SIM_CL_OPTION2 ""
-ENV SIM_CL_OPTION3 ""
-ENV SIM_CL_OPTION4 ""
-ENV SIM_CL_OPTION5 ""
+ENV SIM_OPTIONS "--out=udpout:127.0.0.1:14559"
 ENV SPEEDUP 1
 WORKDIR "/ardupilot/ArduPlane"
-ENTRYPOINT ["sim_vehicle.py"]
-CMD["--speedup=$SPEEDUP $SIM_CL_OPTION1 $SIM_CL_OPTION2 $SIM_CL_OPTION3 $SIM_CL_OPTION4 $SIM_CL_OPTION5"]
+ENTRYPOINT [sim_vehicle.py --speedup=$SPEEDUP $SIM_OPTIONS]
 
 # fin.
