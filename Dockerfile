@@ -47,6 +47,23 @@ RUN pip install pip matplotlib \
 	pexpect \
 	future 
 
+# adsb needs deeper OpenCV
+#
+RUN apk add ca-certificates openssl \
+	&& update-ca-certificates   
+RUN cd /tmp && \
+  wget https://github.com/opencv/opencv/archive/2.4.13.3.tar.gz && \
+  tar -xzf opencv-2.4.13.3.tar.gz && \
+  cd /tmp/opencv-2.4.13.3 && \
+  mkdir build && \
+  cd build && \
+  cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_FFMPEG=NO \
+  -D WITH_IPP=NO -D WITH_OPENEXR=NO .. && \
+  make VERBOSE=1 && \
+  make && \
+  make install
+RUN rm -rf /tmp/opencv*
+
 # Install ardupilot
 RUN git clone git://github.com/ArduPilot/ardupilot.git
 WORKDIR "/ardupilot"
@@ -83,7 +100,8 @@ RUN sed -i 's/feenableexcept(exceptions);/\/\/feenableexcept(exceptions);/' /ard
 RUN . /etc/profile && sim_vehicle.py -w
 
 # Cleanup
-RUN rm -rf /tmp/*
+#RUN apk del \
+#	build-base \
 
 # Setup shell so that it does load profile info
 ENV ENV="/etc/profile"
