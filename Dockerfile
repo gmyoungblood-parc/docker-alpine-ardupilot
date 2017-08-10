@@ -81,7 +81,6 @@ RUN sed -i 's/feenableexcept(exceptions);/\/\/feenableexcept(exceptions);/' /ard
 	sed -i 's/if (old >= 0 && feenableexcept(old) < 0)/if (0)/' /ardupilot/libraries/AP_Math/matrix_alg.cpp 
 # -- Ok, let's compile
 RUN . /etc/profile && sim_vehicle.py -w
-# RUN ln -s /ardupilot/modules/mavlink/message_definitions message_definitions
 
 # Cleanup
 RUN rm -rf /tmp/*
@@ -96,7 +95,7 @@ ENV SIM_CL_OPTION3 ""
 ENV SIM_CL_OPTION4 ""
 ENV SIM_CL_OPTION5 ""
 ENV SPEEDUP 1
-ENTRYPOINT ["ardupilot/ArduPlane"]
+WORKDIR "/ardupilot/ArduPlane"
 CMD ["sim_vehicle.py --speedup=$SPEEDUP $SIM_CL_OPTION1 $SIM_CL_OPTION2 $SIM_CL_OPTION3 $SIM_CL_OPTION4 $SIM_CL_OPTION5"]
 
 # fin.
