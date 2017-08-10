@@ -26,6 +26,7 @@ RUN apk update && apk add bash \
 	expat-dev \
 	gcc \
 	make \
+	cmake \
 	g++ \
 	python \
 	py-lxml \
@@ -49,20 +50,21 @@ RUN pip install pip matplotlib \
 
 # adsb needs deeper OpenCV
 #
-RUN apk add ca-certificates openssl \
-	&& update-ca-certificates   
+RUN apk add ca-certificates openssl &&\
+	update-ca-certificates   
+WORKDIR "/tmp"
 RUN cd /tmp && \
-  wget https://github.com/opencv/opencv/archive/2.4.13.3.tar.gz && \
-  tar -xzf opencv-2.4.13.3.tar.gz && \
-  cd /tmp/opencv-2.4.13.3 && \
-  mkdir build && \
-  cd build && \
-  cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_FFMPEG=NO \
-  -D WITH_IPP=NO -D WITH_OPENEXR=NO .. && \
-  make VERBOSE=1 && \
-  make && \
-  make install
+	wget -O opencv-2.4.13.3.tar.gz https://github.com/opencv/opencv/archive/2.4.13.3.tar.gz && \
+	tar -xzf opencv-2.4.13.3.tar.gz &&\
+	cd /tmp/opencv-2.4.13.3 && \
+	mkdir build && \
+	cd build && \
+	cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_FFMPEG=NO -D WITH_IPP=NO -D WITH_OPENEXR=NO .. && \
+	make VERBOSE=1 && \
+	make && \
+	make install
 RUN rm -rf /tmp/opencv*
+WORKDIR "/"
 
 # Install ardupilot
 RUN git clone git://github.com/ArduPilot/ardupilot.git
