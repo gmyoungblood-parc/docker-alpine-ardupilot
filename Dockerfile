@@ -86,4 +86,17 @@ RUN . /etc/profile && sim_vehicle.py -w
 # Cleanup
 RUN rm -rf /tmp/*
 
+# Setup shell so that it does load profile info
+ENV ENV="/etc/profile"
+
+# Execution Setup for sim_vehicle autorun
+ENV SIM_CL_OPTION1 "--out=udpout:127.0.0.1:14559"
+ENV SIM_CL_OPTION2 ""
+ENV SIM_CL_OPTION3 ""
+ENV SIM_CL_OPTION4 ""
+ENV SIM_CL_OPTION5 ""
+ENV SPEEDUP 1
+ENTRYPOINT ["ardupilot/ArduPlane"]
+CMD ["sim_vehicle.py --speedup=$SPEEDUP $SIM_CL_OPTION1 $SIM_CL_OPTION2 $SIM_CL_OPTION3 $SIM_CL_OPTION4 $SIM_CL_OPTION5"]
+
 # fin.
