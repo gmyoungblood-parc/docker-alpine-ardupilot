@@ -92,6 +92,6 @@ ENV ENV="/etc/profile"
 ENV SIM_OPTIONS "--out=udpout:127.0.0.1:14559"
 ENV SPEEDUP 1
 WORKDIR "/ardupilot/ArduPlane"
-ENTRYPOINT [sim_vehicle.py --speedup=$SPEEDUP $SIM_OPTIONS]
+ENTRYPOINT sim_vehicle.py --speedup=$SPEEDUP $SIM_OPTIONS
 
 # fin.
