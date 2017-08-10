@@ -18,8 +18,7 @@ EXPOSE 10000-10001
 EXPOSE 14550-14559
 
 # Base Packages
-RUN apk update && apk add bash \
-	git \
+RUN apk update && apk add git \
 	libtool \ 
 	automake \
 	autoconf \
@@ -48,7 +47,7 @@ RUN pip install pip matplotlib \
 	pexpect \
 	future 
 
-# adsb needs deeper OpenCV
+# adsb needs deeper OpenCV build
 #
 RUN apk add ca-certificates openssl &&\
 	update-ca-certificates   
@@ -90,7 +89,9 @@ RUN pip install pymavlink \
 RUN echo 'export PATH=$PATH:/jsbsim/src' >> /etc/profile ; \
 	echo 'export PATH=$PATH:/ardupilot/Tools/autotest' >> /etc/profile ; \
 	echo 'export PATH=/usr/lib/ccache:$PATH' >> /etc/profile
-RUN . /etc/profile
+
+# Setup shell so that it does load profile info
+ENV ENV="/etc/profile"
 
 # Compile ardupilot
 WORKDIR "/ardupilot/ArduPlane"
@@ -101,12 +102,22 @@ RUN sed -i 's/feenableexcept(exceptions);/\/\/feenableexcept(exceptions);/' /ard
 # -- Ok, let's compile
 RUN . /etc/profile && sim_vehicle.py -w
 
-# Cleanup
-#RUN apk del \
-#	build-base \
-
-# Setup shell so that it does load profile info
-ENV ENV="/etc/profile"
+# Cleanup unecessary packages after build
+# RUN apk del \
+# 	build-base \
+# 	cmake \
+# 	libtool \ 
+# 	automake \
+# 	autoconf \
+# 	expat-dev \
+# 	freetype-dev \
+# 	libpng-dev \
+# 	python-dev \
+# 	lapack-dev \
+# 	ccache \
+# 	gawk \
+# 	gfortran
+# RUN rm -rf /var/cache/apk/*
 
 # Execution Setup for sim_vehicle autorun
 ENV SIM_OPTIONS "--out=udpout:127.0.0.1:14559"
