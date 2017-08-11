@@ -7,7 +7,9 @@ This container establishes an environment for running ArduPilot, which includes 
 
 ArduPilot is set to run in ArduPlane using JSBsim for flight dynamics.
 
-This container is currently 1.19 GB in size (stripped down from 1.95 GB) when built locally and squashed (e.g., `docker-alpine-ardupilot$ build --squash -t ardupilot-contained .`). It is listed on [Docker Hub](https://hub.docker.com/r/gmyoungbloodparc/ardupilot-sitl/) as `gmyoungblood/ardupilot-sitl` and weighs in at 1.5 GB. ArduPilot and JSBsim comprise ~360 MB, supporting (mostly python) /usr/lib libraries consume ~400 MB of which scipy, MAVproxy, and pymavlink take over half, and in /usr/libexec gcc and git (required) take up ~100 MB. 
+This container is currently 1.19 GB in size (stripped down from 1.95 GB) when built locally and squashed (e.g., `docker-alpine-ardupilot$ build --squash -t ardupilot-contained .`). It is listed on [Docker Hub](https://hub.docker.com/r/gmyoungbloodparc/ardupilot-sitl/) as `gmyoungblood/ardupilot-sitl` and weighs in, sadly due to caching, still at 1.95 GB. So, if you need a smaller version then build it locally. 
+
+The details:  ArduPilot and JSBsim comprise ~360 MB, supporting (mostly python) /usr/lib libraries consume ~400 MB of which scipy, MAVproxy, and pymavlink take over half, and in /usr/libexec gcc and git (required) take up ~100 MB. 
 
 ### ArduPilot sim_vehicle.py
 
