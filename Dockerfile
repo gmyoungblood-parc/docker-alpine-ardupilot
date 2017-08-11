@@ -5,7 +5,7 @@
 # Copyright (C)2017 PARC, a Xerox company
 # Licensed under GPL, Version 3
 #
-FROM alpine:latest
+FROM alpine:3.6
 MAINTAINER Michael Youngblood <Michael.Youngblood@parc.com>
 #
 # 
@@ -17,7 +17,8 @@ EXPOSE 10000-10001
 EXPOSE 14550-14559
 
 # Base Packages
-RUN apk update && apk add git \
+RUN apk update && apk add --no-cache\
+	git \
 	libtool \ 
 	automake \
 	autoconf \
@@ -35,7 +36,9 @@ RUN apk update && apk add git \
 	libpng-dev \
 	python-dev \
 	lapack-dev \
-	gfortran
+	gfortran \
+	ca-certificates \
+	openssl
 
 # Python Dependencies
 #
@@ -49,8 +52,7 @@ RUN pip install pip matplotlib \
 # adsb needs deeper OpenCV build
 #
 WORKDIR "/tmp"
-RUN apk add ca-certificates openssl &&\
-	update-ca-certificates && \
+RUN update-ca-certificates && \
 	cd /tmp && \
 	wget -O opencv-2.4.13.3.tar.gz https://github.com/opencv/opencv/archive/2.4.13.3.tar.gz && \
 	tar -xzf opencv-2.4.13.3.tar.gz &&\
@@ -60,8 +62,7 @@ RUN apk add ca-certificates openssl &&\
 	cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_FFMPEG=NO -D WITH_IPP=NO -D WITH_OPENEXR=NO .. && \
 	make VERBOSE=1 && \
 	make && \
-	make install && \
-	rm -rf /tmp/opencv*
+	make install 
 WORKDIR "/"
 
 # Install ardupilot
@@ -85,19 +86,20 @@ RUN pip install pymavlink \
 	MAVProxy
 
 # Setup environment
-RUN echo 'export PATH=$PATH:/jsbsim/src' >> /etc/profile ; \
-	echo 'export PATH=$PATH:/ardupilot/Tools/autotest' >> /etc/profile ; \
-	echo 'export PATH=/usr/lib/ccache:$PATH' >> /etc/profile
+RUN echo 'export PATH=$PATH:/jsbsim/src' >> /etc/profile && \
+	echo 'export PATH=$PATH:/ardupilot/Tools/autotest' >> /etc/profile && \
+	echo 'export PATH=/usr/lib/ccache:$PATH' >> /etc/profile && \
+	echo 'export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH' >> /etc/profile
 
 # Compile ardupilot
 WORKDIR "/ardupilot/ArduPlane"
 # -- Hacks because Alpine doesn't use glibc, so we are going to adjust some code
 RUN sed -i 's/feenableexcept(exceptions);/\/\/feenableexcept(exceptions);/' /ardupilot/libraries/AP_HAL_SITL/Scheduler.cpp  && \
 	sed -i 's/int old = fedisableexcept(FE_OVERFLOW);/int old = 1;/' /ardupilot/libraries/AP_Math/matrix_alg.cpp && \
-	sed -i 's/if (old >= 0 && feenableexcept(old) < 0)/if (0)/' /ardupilot/libraries/AP_Math/matrix_alg.cpp && \
-	. /etc/profile && sim_vehicle.py -w
+	sed -i 's/if (old >= 0 && feenableexcept(old) < 0)/if (0)/' /ardupilot/libraries/AP_Math/matrix_alg.cpp 
+RUN . /etc/profile && sim_vehicle.py -w
 
-# Cleanup unecessary packages after build
+# Cleanup unnecessary packages after build
 RUN apk del \
 	build-base \
 	cmake \
@@ -105,7 +107,11 @@ RUN apk del \
 	autoconf \
 	ccache \
 	gawk && \
-	rm -rf /var/cache/apk/*
+	rm -rf /var/cache/apk/* && \
+	rm -rf /tmp/opencv* && \
+	rm -rf /ardupilot/.git && \
+	rm -rf /root/.cache && \
+	rm -rf /jsbsim/.git
 
 # Execution Setup for sim_vehicle autorun
 ENV ENV="/etc/profile"
