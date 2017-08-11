@@ -1,5 +1,8 @@
 # ardupilot-sitl
-### Docker container << Alpine Linux  + ArduPilot SITL
+
+From [gmyoungblood-parc's github repository](https://github.com/gmyoungblood-parc/docker-alpine-ardupilot). Feel free to fork and  
+
+### Docker container << Alpine Linux  + ArduPilot SITL + Libs
 
 Docker container setup for ArduPilot Software-In-The-Loop on Alpine Linux
 
