@@ -106,13 +106,18 @@ RUN apk del \
 	automake \
 	autoconf \
 	ccache \
+	openssl \
+	ca-certificates \
 	gawk && \
 	rm -rf /var/cache/apk/* && \
 	rm -rf /tmp/opencv* && \
-	rm -rf /ardupilot/.git && \
-	rm -rf /root/.cache && \
-	rm -rf /jsbsim/.git
-
+	rm -rf /root/.ccache && \
+	rm -rf /root/.config && \
+	rm -rf /root/.ash_history && \
+	rm -rf /root/.tilecache && \
+	rm -rf /jsbsim/.git && \
+	rm -rf /ardupilot/.git/objects/pack 
+	
 # Execution Setup for sim_vehicle autorun
 ENV ENV="/etc/profile"
 ENV SIM_OPTIONS "--out=udpout:docker.for.mac.localhost:14559"
