@@ -1,6 +1,6 @@
 # ardupilot-sitl
 
-From [gmyoungblood-parc's github repository](https://github.com/gmyoungblood-parc/docker-alpine-ardupilot). Feel free to fork and  
+From [gmyoungblood-parc's github repository](https://github.com/gmyoungblood-parc/docker-alpine-ardupilot). Feel free to fork and go crazy. 
 
 ### Docker container << Alpine Linux  + ArduPilot SITL + Libs
 
