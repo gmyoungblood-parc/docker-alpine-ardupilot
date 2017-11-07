@@ -45,7 +45,6 @@ RUN apk update && apk add --no-cache\
 RUN pip install pip matplotlib \
 	pyserial \
 	scipy \
-	opencv \
 	pexpect \
 	future 
 
@@ -54,9 +53,9 @@ RUN pip install pip matplotlib \
 WORKDIR "/tmp"
 RUN update-ca-certificates && \
 	cd /tmp && \
-	wget -O opencv-2.4.13.3.tar.gz https://github.com/opencv/opencv/archive/2.4.13.3.tar.gz && \
-	tar -xzf opencv-2.4.13.3.tar.gz &&\
-	cd /tmp/opencv-2.4.13.3 && \
+	wget -O opencv-2.4.13.4.tar.gz https://github.com/opencv/opencv/archive/2.4.13.4.tar.gz && \
+	tar -xzf opencv-2.4.13.4.tar.gz &&\
+	cd /tmp/opencv-2.4.13.4 && \
 	mkdir build && \
 	cd build && \
 	cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D WITH_FFMPEG=NO -D WITH_IPP=NO -D WITH_OPENEXR=NO .. && \
