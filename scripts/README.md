@@ -24,4 +24,4 @@ is shorthand for
 
 ## `entryPoint.sh`
 
-The script runs as the entry point for the container at startup (overriding the container's default one), in support of the system id setting by `runMAV.sh`. It is not meant to be called directly, but you may wish to edit it for further customisation.
+The script runs as the entry point for the container at startup (overriding the container's default one), in support of the system id setting by `runMAV.sh`. Thus it is not meant to be called directly, though you may wish to edit it for further customisation.
